@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DSA Uploader - Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: #151c2c;
+      --border-color: #242f49;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --primary: #3b82f6;
+      --primary-glow: rgba(59, 130, 246, 0.4);
+      --accent: #f59e0b;
+      --accent-glow: rgba(245, 158, 11, 0.4);
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 80vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 0 8px;
+      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 16px;
+      background-color: rgba(11, 15, 25, 0.8);
+      border: 1.5px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 14px;
+      box-sizing: border-box;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #save {
+      background-color: var(--primary);
+      color: #ffffff;
+    }
+
+    #save:hover {
+      background-color: #2563eb;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px var(--primary-glow);
+    }
+
+    #test {
+      background-color: transparent;
+      border: 1.5px solid var(--border-color);
+      color: var(--text-main);
+    }
+
+    #test:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-color: var(--text-muted);
+      transform: translateY(-1px);
+    }
+
+    pre#status {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 10px;
+      background-color: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-color);
+      font-family: monospace;
+      font-size: 13px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      color: var(--accent);
+    }
+
+    pre#status.success {
+      color: var(--success);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    pre#status.error {
+      color: var(--danger);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>DSA Uploader Setup</h1>
+    <div class="subtitle">Configure your GitHub Integration settings below</div>
+
+    <div class="form-group">
+      <label for="token">GitHub Token</label>
+      <input type="password" id="token" placeholder="ghp_..." autocomplete="off" />
+    </div>
+
+    <div class="form-group">
+      <label for="owner">GitHub Owner</label>
+      <input type="text" id="owner" placeholder="your-username" autocomplete="off" />
+    </div>
+
+    <div class="form-group">
+      <label for="repo">GitHub Repository</label>
+      <input type="text" id="repo" placeholder="dsa-archive" autocomplete="off" />
+    </div>
+
+    <div class="form-group">
+      <label for="branch">Target Branch</label>
+      <input type="text" id="branch" placeholder="main" autocomplete="off" />
+    </div>
+
+    <div class="row">
+      <button id="test">Test Connection</button>
+      <button id="save">Save Settings</button>
+    </div>
+
+    <pre id="status" style="display: none;"></pre>
+  </div>
+
+  <script type="module" src="../../dist/ui/options.js"></script>
+</body>
+
+</html>

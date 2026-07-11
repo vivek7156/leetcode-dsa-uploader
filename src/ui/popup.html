@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DSA Uploader</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: #151c2c;
+      --border-color: #242f49;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --primary: #3b82f6;
+      --primary-glow: rgba(59, 130, 246, 0.35);
+      --accent: #f59e0b;
+      --accent-glow: rgba(245, 158, 11, 0.3);
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      margin: 0;
+      padding: 0;
+      width: 340px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(21, 28, 44, 0.6);
+    }
+
+    h1 {
+      font-size: 17px;
+      font-weight: 700;
+      margin: 0;
+      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .settings-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s ease, transform 0.2s ease;
+      border-radius: 6px;
+    }
+
+    .settings-btn:hover {
+      color: var(--text-main);
+      background-color: rgba(255, 255, 255, 0.05);
+      transform: rotate(20deg);
+    }
+
+    .settings-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .content {
+      padding: 16px 18px;
+    }
+
+    /* Status Panel */
+    .status-panel {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background-color: rgba(21, 28, 44, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 11px 14px;
+      margin-bottom: 14px;
+    }
+
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      min-width: 8px;
+      border-radius: 50%;
+      background-color: var(--danger);
+      box-shadow: 0 0 8px var(--danger);
+    }
+
+    .status-indicator.ready {
+      background-color: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    .status-text {
+      font-size: 13px;
+      font-weight: 500;
+      flex: 1;
+    }
+
+    .status-text span {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* Setup Guide Card */
+    .guide-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      display: none;
+    }
+
+    .guide-card.visible {
+      display: block;
+    }
+
+    .guide-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin: 0 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--accent);
+    }
+
+    .guide-title svg {
+      fill: var(--accent);
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+
+    .steps {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .step {
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      min-width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3b82f6, #60a5fa);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 1px;
+    }
+
+    .step-body {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+
+    .step-body strong {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .step-body code {
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-size: 11px;
+      color: #93c5fd;
+      font-family: monospace;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border-color);
+      margin: 4px 0 14px;
+    }
+
+    /* Sync Card */
+    .sync-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin: 0 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .sync-input-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    select {
+      flex: 1;
+      background-color: var(--bg-color);
+      border: 1.5px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-main);
+      padding: 7px 10px;
+      font-family: inherit;
+      font-size: 12px;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+    }
+
+    select:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: #2563eb;
+      box-shadow: 0 0 10px var(--primary-glow);
+      transform: translateY(-0.5px);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Tip bubble */
+    .auto-tip {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.07);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 9px;
+      padding: 9px 11px;
+      font-size: 11.5px;
+      color: #6ee7b7;
+      line-height: 1.5;
+    }
+
+    .auto-tip svg {
+      min-width: 14px;
+      margin-top: 2px;
+      fill: #6ee7b7;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      display: none;
+      margin-top: 12px;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      background-color: var(--bg-color);
+      height: 5px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 7px;
+      border: 1px solid var(--border-color);
+    }
+
+    .progress-bar-fill {
+      width: 0%;
+      background: linear-gradient(90deg, #60a5fa, #3b82f6);
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .progress-text {
+      font-size: 12px;
+      color: var(--text-main);
+      word-break: break-word;
+      line-height: 1.4;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 8px 18px 16px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h1>🚀 DSA Uploader</h1>
+    <button id="settings" class="settings-btn" title="Open Settings">
+      <svg viewBox="0 0 24 24">
+        <path
+          d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="content">
+    <!-- Connection Status Panel -->
+    <div class="status-panel">
+      <div id="status-dot" class="status-indicator"></div>
+      <div class="status-text">
+        <span id="status-title">Checking config...</span>
+        <span id="status-desc">Validating repository status</span>
+      </div>
+    </div>
+
+    <!-- Onboarding Guide (shown only when not configured) -->
+    <div id="guide-card" class="guide-card">
+      <div class="guide-title">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+        </svg>
+        Quick Setup Guide
+      </div>
+      <ol class="steps">
+        <li class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Create a GitHub Token</strong><br>
+            Go to <code>github.com → Settings → Developer Settings → Personal Access Tokens (Fine-grained)</code> and
+            select repo with <code>Contents (Read & Write)</code> permission.
+          </div>
+        </li>
+        <li class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Enter your details</strong><br>
+            Click the <strong>⚙ gear icon</strong> at the top right to open Settings. Paste your token, GitHub username,
+            and the target repo name.
+          </div>
+        </li>
+        <li class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Submit on LeetCode</strong><br>
+            Solve and submit a problem. The extension automatically pushes your solution with problem description to
+            GitHub.
+          </div>
+        </li>
+        <li class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <strong>Sync older solutions</strong><br>
+            Use the <strong>Sync Historical</strong> section below to bulk-import your past accepted submissions.
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <!-- Auto-sync tip (shown only when configured) -->
+    <div id="auto-tip" class="auto-tip" style="display:none; margin-bottom:14px;">
+      <svg viewBox="0 0 24 24" width="14" height="14">
+        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+      </svg>
+      <span><strong>Auto-sync active.</strong> Every accepted submission on LeetCode is pushed to GitHub automatically
+        in the background.</span>
+    </div>
+
+    <!-- Sync Historical Solutions Card -->
+    <div class="sync-card">
+      <div class="card-title">
+        <svg style="width:15px;height:15px;fill:#60a5fa;" viewBox="0 0 24 24">
+          <path
+            d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" />
+        </svg>
+        Sync Historical Solutions
+      </div>
+      <div class="sync-input-row">
+        <select id="sync-limit" title="Sync Solutions Limit">
+          <option value="20">Latest 20 solutions</option>
+          <option value="50" selected>Latest 50 solutions</option>
+          <option value="100">Latest 100 solutions</option>
+          <option value="500">Latest 500 solutions</option>
+          <option value="all">All solutions</option>
+        </select>
+        <button id="start-sync" class="btn-primary">Sync Now</button>
+      </div>
+
+      <!-- Progress Tracker -->
+      <div id="progress-area" class="progress-container">
+        <div class="progress-bar-bg">
+          <div id="progress-bar" class="progress-bar-fill"></div>
+        </div>
+        <div class="progress-meta">
+          <span id="progress-desc" class="progress-text">Importing solutions...</span>
+          <span id="progress-val">0%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    DSA Uploader · automates solution push on submit.
+  </div>
+
+  <script type="module" src="../../dist/ui/popup.js"></script>
+</body>
+
+</html>
