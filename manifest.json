@@ -20,9 +20,21 @@
     "service_worker": "dist/background/service-worker.js",
     "type": "module"
   },
+  "icons": {
+    "16": "icon.svg",
+    "32": "icon.svg",
+    "48": "icon.svg",
+    "128": "icon.svg"
+  },
   "action": {
     "default_title": "DSA Uploader",
-    "default_popup": "src/ui/popup.html"
+    "default_popup": "src/ui/popup.html",
+    "default_icon": {
+      "16": "icon.svg",
+      "32": "icon.svg",
+      "48": "icon.svg",
+      "128": "icon.svg"
+    }
   },
   "content_scripts": [
     {
